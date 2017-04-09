@@ -1,0 +1,15 @@
+{
+  "name": "localapp",
+  "version": "1.0.0",
+  "description": "The electron shell for gibit.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Ben B",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^1.6.2",
+    "electronify-server": "^0.6.2"
+  }
+}

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>The XMLHttpRequest Object</h1>
+<button type="button" onclick="loadUI()">Get content</button>
+
+<div id="content"></div>
+
+<script>
+function loadUI() {
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function() {
+    if (this.readyState == 4 && this.status == 200) {
+      document.getElementById("content").innerHTML =
+      this.responseText;
+    }
+  };
+  xhttp.open("GET", "ui/index.html", true);
+  xhttp.send();
+}
+</script>
+
+</body>
+</html>
