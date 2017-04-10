@@ -1,10 +1,18 @@
-import http.server
-import socketserver
+#!/usr/bin/env python
 
-PORT = 8000
+import asyncio
+import websockets
 
-Handler = http.server.SimpleHTTPRequestHandler
+async def hello(websocket, path):
+    while True:
+        name = await websocket.recv()
+        print("< {}".format(name))
 
-httpd = socketserver.TCPServer(("", PORT), Handler)
-print("serving at port", PORT)
-httpd.serve_forever()
+        greeting = "Hello {}!".format(name)
+        await websocket.send(greeting)
+        print("> {}".format(greeting))
+
+start_server = websockets.serve(hello, 'localhost', 8787)
+
+asyncio.get_event_loop().run_until_complete(start_server)
+asyncio.get_event_loop().run_forever()

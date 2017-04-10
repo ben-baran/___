@@ -1,4 +1,8 @@
-Installation:
+##Installation (requires Python 3.5+):
 ```
-npm3 install watchdog
+pip install watchdog
+pip install websockets
+python server.py
 ```
+
+Then open `index.html` in your favorite browser.

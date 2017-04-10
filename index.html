@@ -2,23 +2,22 @@
 <html>
 <body>
 
-<h1>The XMLHttpRequest Object</h1>
-<button type="button" onclick="loadUI()">Get content</button>
-
-<div id="content"></div>
+<h1>Local Websocket Check</h1>
+<input id="message">
+<button type="button" onclick="socketSend()">Get a reply</button>
+<ul id="content"></ul>
 
 <script>
-function loadUI() {
-  var xhttp = new XMLHttpRequest();
-  xhttp.onreadystatechange = function() {
-    if (this.readyState == 4 && this.status == 200) {
-      document.getElementById("content").innerHTML =
-      this.responseText;
+    var sock = new WebSocket("ws://localhost:8787");
+    sock.onmessage = function (event) {
+        var newLi = document.createElement("li");
+        var messageText = document.createTextNode(event.data);
+        newLi.appendChild(messageText);
+        document.getElementById("content").appendChild(newLi);
+    };
+    function socketSend() {
+        sock.send(document.getElementById("message").value);
     }
-  };
-  xhttp.open("GET", "ui/index.html", true);
-  xhttp.send();
-}
 </script>
 
 </body>
