@@ -2,18 +2,32 @@
 <html>
 <body>
 
-<h1>Local Websocket Check</h1>
+<h1>Gibit</h1>
 <input id="message">
 <button type="button" onclick="socketSend()">Get a reply</button>
-<ul id="content"></ul>
+<h3>Root Directories</h3>
+<div id="root-directories"></div>
+<h3>Changes</h3>
+<ul id="changes"></ul>
 
 <script>
     var sock = new WebSocket("ws://localhost:8787");
     sock.onmessage = function (event) {
-        var newLi = document.createElement("li");
-        var messageText = document.createTextNode(event.data);
-        newLi.appendChild(messageText);
-        document.getElementById("content").appendChild(newLi);
+        message = JSON.parse(event.data);
+        if (message.type === "root_directory") {
+            console.log("root_directory added");
+            var new_root_folder = document.createElement("div");
+            var folder_name = document.createTextNode(message.path);
+            new_root_folder.appendChild(folder_name);
+            document.getElementById("root-directories").appendChild(new_root_folder);
+        }
+
+        if (message.type === "system_change") {
+            var new_li = document.createElement("li");
+            var li_text = document.createTextNode(message.change_type + ": " + message.change_dir);
+            new_li.appendChild(li_text);
+            document.getElementById("changes").appendChild(new_li);
+        }
     };
     function socketSend() {
         sock.send(document.getElementById("message").value);
