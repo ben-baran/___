@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+<link rel="stylesheet" type="text/css" href="index.css"/>
 <body>
 
 <h1>Gibit</h1>
@@ -19,10 +20,35 @@
             var new_root_folder = document.createElement("div");
             var folder_name = document.createTextNode(message.path);
             new_root_folder.appendChild(folder_name);
+            new_root_folder.id = 'folder-' + message.path;
             document.getElementById("root-directories").appendChild(new_root_folder);
         }
 
-        if (message.type === "system_change") {
+        if (message.type === "existing_subfolders") {
+            root_directory = document.getElementById("folder-" + message.root)
+            console.log(message.entries[0]);
+            for (entry in message.entries[0]) {
+                var new_folder = document.createElement("div");
+                var folder_name = document.createTextNode(message.entries[0][entry]);
+                new_folder.appendChild(folder_name);
+                new_folder.id = 'folder-' + message.root + '/' + message.entries[0][entry];
+                root_directory.appendChild(new_folder);
+            }
+        }
+
+        if (message.type === "existing_files") {
+            root_directory = document.getElementById("folder-" + message.root)
+            console.log(message.entries[0]);
+            for (entry in message.entries[0]) {
+                var new_file = document.createElement("div");
+                var file_name = document.createTextNode(message.entries[0][entry]);
+                new_file.appendChild(file_name);
+                new_file.id = 'file-' + message.root + '/' + message.entries[0][entry];
+                root_directory.appendChild(new_file);
+            }
+        }
+
+        if (message.type === "file_watch_activated") {
             var new_li = document.createElement("li");
             var li_text = document.createTextNode(message.change_type + ": " + message.change_dir);
             new_li.appendChild(li_text);

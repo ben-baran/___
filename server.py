@@ -31,12 +31,14 @@ for path in settings['watch']:
 async def filesys_info(websocket, path):
     for settings_root_path in settings['watch']:
         await websocket.send(json.dumps({'type': 'root_directory', 'path': settings_root_path}))
-    # await websocket.send(json.dumps([entry for entry in os.walk('./test')]))
+    for root, subfolders, files in os.walk('./test'):
+        await websocket.send(json.dumps({'type': 'existing_subfolders', 'root': root, 'entries': [subfolders]}))
+        await websocket.send(json.dumps({'type': 'existing_files', 'root': root, 'entries': [files]}))
 
     while True:
         while not message_queue.empty():
             next_change = message_queue.get()
-            message_data = {'type': 'system_change', 'change_type': next_change[0], 'change_dir': next_change[1]}
+            message_data = {'type': 'file_watch_activated', 'change_type': next_change[0], 'change_dir': next_change[1]}
             message = json.dumps(message_data)
             await websocket.send(message)
             print(message)
